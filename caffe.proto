@@ -1,0 +1,42 @@
+// Message that stores parameters used by ROIPoolingLayer
+message ROIPoolingParameter {
+  // Pad, kernel size, and stride are all given as a single value for equal
+  // dimensions in height and width or as Y, X pairs.
+  optional uint32 pooled_h = 1 [default = 0]; // The pooled output height
+  optional uint32 pooled_w = 2 [default = 0]; // The pooled output width
+  // Multiplicative spatial scale factor to translate ROI coords from their
+  // input scale to the scale used when pooling
+  optional float spatial_scale = 3 [default = 1];
+}
+
+message SmoothL1LossParameter {
+  // SmoothL1Loss(x) =
+  //   0.5 * (sigma * x) ** 2    -- if x < 1.0 / sigma / sigma
+  //   |x| - 0.5 / sigma / sigma -- otherwise
+  optional float sigma = 1 [default = 1];
+}
+
+message WingLossParameter {
+  optional float omega = 1 [default = 10];
+  optional float epsilon = 2 [default = 2];
+}
+
+message Coord2heatmapParameter {
+  optional uint32 height = 1;
+  optional uint32 width = 2;
+  optional uint32 num_points = 3;
+  optional uint32 max_value = 4 [default = 1];
+  optional uint32 radius = 5 [default = 5];
+}
+
+message HeatmapLossParameter {
+  enum LossType {
+    CE = 0;
+    SE = 1; // Square error, actually MSE
+  }
+  optional LossType loss_type = 1 [default = CE];
+  optional float negative_ratio = 2 [default = 0.001];
+  optional float eps = 3 [default = 1e-8];
+  optional float grad_clip = 4 [default = 10.0];
+  optional float negative_sample_prob = 5 [default = 1.0];
+}
